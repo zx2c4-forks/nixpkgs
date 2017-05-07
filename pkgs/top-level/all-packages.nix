@@ -15880,9 +15880,7 @@ with pkgs;
 
   ir.lv2 = callPackage ../applications/audio/ir.lv2 { };
 
-  bip = callPackage ../applications/networking/irc/bip {
-    openssl = openssl_1_0_2;
-  };
+  bip = callPackage ../applications/networking/irc/bip { };
 
   j4-dmenu-desktop = callPackage ../applications/misc/j4-dmenu-desktop/default.nix { };
 
