@@ -1,14 +1,11 @@
 { stdenv, fetchurl, fetchpatch, zlib, openssl, perl, libedit, pkgconfig, pam, autoreconfHook
 , etcDir ? null
 , hpnSupport ? false
-, withKerberos ? false
+, withKerberos ? true
 , withGssapiPatches ? false
 , kerberos
 , linkOpenssl? true
 }:
-
-assert withKerberos -> kerberos != null;
-assert withGssapiPatches -> withKerberos;
 
 let
 
@@ -23,8 +20,6 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  # Please ensure that openssh_with_kerberos still builds when
-  # bumping the version here!
   name = "openssh-${version}";
   version = if hpnSupport then "7.5p1" else "7.6p1";
 
@@ -49,7 +44,7 @@ stdenv.mkDerivation rec {
       # originally from https://src.fedoraproject.org/rpms/openssh/blob/fffad0579c5aa8c634ef50cd7b290d743e1a5471/f/openssh-7.3p1-openssl-1.1.0.patch
       ./openssl-1.1.0.patch
     ]
-    ++ optional withGssapiPatches gssapiPatch;
+    ++ optional withGssapiPatches (assert withKerberos; gssapiPatch);
 
   postPatch =
     # On Hydra this makes installation fail (sometimes?),
@@ -61,7 +56,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib openssl libedit pam ]
     ++ optional withKerberos kerberos
-    ++ optional hpnSupport autoreconfHook;
+    ++ optional hpnSupport autoreconfHook
+    ;
 
   preConfigure = ''
     # Setting LD causes `configure' and `make' to disagree about which linker
@@ -80,7 +76,7 @@ stdenv.mkDerivation rec {
     "--disable-strip"
     (if pam != null then "--with-pam" else "--without-pam")
   ] ++ optional (etcDir != null) "--sysconfdir=${etcDir}"
-    ++ optional withKerberos "--with-kerberos5=${kerberos}"
+    ++ optional withKerberos (assert kerberos != null; "--with-kerberos5=${kerberos}")
     ++ optional stdenv.isDarwin "--disable-libutil"
     ++ optional (!linkOpenssl) "--without-openssl";
 

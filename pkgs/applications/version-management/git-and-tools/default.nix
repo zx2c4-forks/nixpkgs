@@ -102,6 +102,8 @@ rec {
 
   gitflow = callPackage ./gitflow { };
 
+  grv = callPackage ./grv { };
+
   hub = callPackage ./hub {
     inherit (darwin) Security;
   };
@@ -117,7 +119,7 @@ rec {
     git = gitSVN;
   };
 
-  svn2git_kde = callPackage ./svn2git-kde { };
+  svn_all_fast_export = libsForQt5.callPackage ./svn-all-fast-export { };
 
   tig = callPackage ./tig { };
 
