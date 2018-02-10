@@ -5,7 +5,7 @@
 , perlBindings ? false
 , javahlBindings ? false
 , saslSupport ? false
-, stdenv, fetchurl, apr, aprutil, zlib, sqlite
+, stdenv, fetchurl, pkgconfig, apr, aprutil, zlib, sqlite
 , apacheHttpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
 , sasl ? null, serf ? null, openssl
 }:
@@ -29,6 +29,7 @@ let
     # Can't do separate $lib and $bin, as libs reference bins
     outputs = [ "out" "dev" "man" ];
 
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ zlib apr aprutil sqlite openssl ]
       ++ stdenv.lib.optional httpSupport serf
       ++ stdenv.lib.optional pythonBindings python
