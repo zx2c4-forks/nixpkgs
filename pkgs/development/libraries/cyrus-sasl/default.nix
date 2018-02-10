@@ -4,28 +4,26 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "cyrus-sasl-${version}${optionalString (kerberos == null) "-without-kerberos"}";
-  version = "2.1.27rc3";
+  version = "2.1.27-rc7";
 
   src = fetchurl {
     url = "ftp://ftp.cyrusimap.org/cyrus-sasl/${name}.tar.gz";
-    sha256 = "0aivwvkacfwhblqfl8xj006633dw85pxplgdy6wa64yk5822j3x5";
+    sha256 = "c1846b80e80286c94941a1e27974bba759b171ccad25d5b49bd8d9deab10f54b";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
   buildInputs =
-    [ openssl db gettext kerberos ]
+    [ openssl db gettext ]
     ++ lib.optional enableLdap openldap
     ++ lib.optional stdenv.isFreeBSD autoreconfHook
     ++ lib.optional stdenv.isLinux pam
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
+  propagatedBuildInputs = [ kerberos ];
+
   patches = [
     ./missing-size_t.patch # https://bugzilla.redhat.com/show_bug.cgi?id=906519
-    (fetchpatch { # CVE-2013-4122
-      url = "http://sourceforge.net/projects/miscellaneouspa/files/glibc217/cyrus-sasl-2.1.26-glibc217-crypt.diff";
-      sha256 = "05l7dh1w9d5fvzg0pjwzqh0fy4ah8y5cv6v67s4ssbq8xwd4pkf2";
-    })
   ] ++ lib.optional stdenv.isFreeBSD (
       fetchurl {
         url = "http://www.linuxfromscratch.org/patches/blfs/svn/cyrus-sasl-2.1.26-fixes-3.patch";
@@ -54,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://cyrusimap.web.cmu.edu/;
+    homepage = https://www.cyrusimap.org/sasl;
     description = "Library for adding authentication support to connection-based protocols";
     platforms = platforms.unix;
   };
