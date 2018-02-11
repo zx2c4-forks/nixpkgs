@@ -109,17 +109,6 @@ stdenv.mkDerivation rec {
       })
     ++ [
       (fetchpatch {
-        name = "fix-medium-font.patch";
-        url = "http://anonscm.debian.org/cgit/pkg-kde/qt/qt4-x11.git/plain/debian/patches/"
-          + "kubuntu_39_fix_medium_font.diff?id=21b342d71c19e6d68b649947f913410fe6129ea4";
-        sha256 = "0bli44chn03c2y70w1n8l7ss4ya0b40jqqav8yxrykayi01yf95j";
-      })
-      (fetchpatch {
-        name = "qt4-gcc6.patch";
-        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
-        sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
-      })
-      (fetchpatch {
         name = "qt4-openssl1.1.patch";
         url = "https://raw.githubusercontent.com/manjaro/packages-multilib/6e85f0dd0d778d18335313a011c3c0ca2b6fe2d8/lib32-qt4/qt4-openssl-1.1.patch";
         sha256 = "0i8faaxy83cafpnqm9w2s16hvhfy8445qmhkbaccc7chkx149363";
