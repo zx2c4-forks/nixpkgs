@@ -50,8 +50,6 @@ in
 
     enableParallelBuilding = true;
 
-    passthru.interpreterName = "nodejs";
-
     setupHook = ./setup-hook.sh;
 
     inherit patches;
@@ -84,5 +82,9 @@ in
       platforms = platforms.linux ++ platforms.darwin;
     };
 
-    passthru.python = python2; # to ensure nodeEnv uses the same version
+    passthru = {
+      interpreterName = "nodejs";
+      python = python2; # to ensure nodeEnv uses the same version
+      inherit openssl;
+    };
 }

@@ -13,7 +13,7 @@ nodePackages // {
   dnschain =  nodePackages.dnschain.override (oldAttrs: {
     buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper nodePackages.coffee-script ];
     postInstall = ''
-      wrapProgram $out/bin/dnschain --suffix PATH : ${pkgs.openssl.bin}/bin
+      wrapProgram $out/bin/dnschain --suffix PATH : ${nodejs.openssl.bin}/bin
     '';
   });
 
