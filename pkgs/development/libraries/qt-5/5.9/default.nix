@@ -37,7 +37,13 @@ let
   srcs = import ./srcs.nix { inherit fetchurl; inherit mirror; };
 
   patches = {
-    qtbase = [ ./qtbase.patch ] ++ optional stdenv.isDarwin ./qtbase-darwin.patch;
+    qtbase = [ ./qtbase.patch ] ++ optional stdenv.isDarwin ./qtbase-darwin.patch
+      ++ [(fetchurl {
+          name = "openssl-1.1.0.patch";
+          url = "https://src.fedoraproject.org/cgit/rpms/qt5-qtbase.git/plain/"
+              + "qt5-qtbase-5.9.1-openssl11.patch?id=faeac394c12e";
+          sha256 = "1s7b47i4vd30j2s97fcgnc7jfhga52dhsd9pqr6fvgzv5fnq68d5";
+        })];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
