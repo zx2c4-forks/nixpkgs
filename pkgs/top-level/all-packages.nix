@@ -6974,10 +6974,16 @@ with pkgs;
 
 
   inherit (callPackages ../development/interpreters/php { })
-    php56
     php70
     php71
     php72;
+
+  inherit (
+      # This is a bit hacky, as we can't see the overlays list and only replace it.
+      (nixpkgsFun { overlays = [(self: super: { openssl = self.openssl_1_0_2; })]; })
+      .callPackages ../development/interpreters/php { }
+    )
+    php56;
 
   php-embed = php71-embed;
 
