@@ -5,8 +5,7 @@ assert stdenv.lib.versionAtLeast kernel.version "3.10";
 
 stdenv.mkDerivation rec {
   name = "wireguard-${version}";
-  version = "0.0.20180514";
-
+  inherit (wireguard-tools) version;
   inherit (wireguard-tools) src;
 
   preConfigure = ''
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage     = https://www.wireguard.com/;
     downloadPage = https://git.zx2c4.com/WireGuard/refs/;
-    description  = " Tools for the WireGuard secure network tunnel";
+    description  = "Kernel module for WireGuard";
     maintainers  = with maintainers; [ ericsagnes mic92 zx2c4 ];
     license      = licenses.gpl2;
     platforms    = platforms.linux;
